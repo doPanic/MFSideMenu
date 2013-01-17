@@ -6,11 +6,11 @@
 //  Copyright (c) 2012 University of Wisconsin - Madison. All rights reserved.
 //
 
-#import "UINavigationController+MFSideMenu.h"
+#import "MFSideMenuNavigationController.h"
 #import "MFSideMenu.h"
 #import <objc/runtime.h>
 
-@implementation UINavigationController (MFSideMenu)
+@implementation MFSideMenuNavigationController
 
 static char menuKey;
 

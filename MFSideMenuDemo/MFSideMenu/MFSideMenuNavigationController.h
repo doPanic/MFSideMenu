@@ -10,7 +10,7 @@
 
 @class MFSideMenu;
 
-@interface UINavigationController (MFSideMenu)
+@interface MFSideMenuNavigationController : UINavigationController
 
 @property (nonatomic, strong) MFSideMenu *sideMenu;
 

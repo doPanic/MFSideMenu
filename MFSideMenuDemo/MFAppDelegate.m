@@ -17,14 +17,14 @@
     return [[DemoViewController alloc] initWithNibName:@"DemoViewController" bundle:nil];
 }
 
-- (UINavigationController *)navigationController {
-    return [[UINavigationController alloc]
+- (MFSideMenuNavigationController *)navigationController {
+    return [[MFSideMenuNavigationController alloc]
             initWithRootViewController:[self demoController]];
 }
 
 - (MFSideMenu *)sideMenu {
     SideMenuViewController *sideMenuController = [[SideMenuViewController alloc] init];
-    UINavigationController *navigationController = [self navigationController];
+    MFSideMenuNavigationController *navigationController = [self navigationController];
     
     MFSideMenuOptions options = MFSideMenuOptionMenuButtonEnabled|MFSideMenuOptionBackButtonEnabled
                                                                  |MFSideMenuOptionShadowEnabled;

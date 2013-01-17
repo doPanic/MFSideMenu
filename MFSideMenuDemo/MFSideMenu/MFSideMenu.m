@@ -50,7 +50,7 @@
 #pragma mark -
 #pragma mark - Menu Creation
 
-+ (MFSideMenu *) menuWithNavigationController:(UINavigationController *)controller
++ (MFSideMenu *) menuWithNavigationController:(MFSideMenuNavigationController *)controller
                         sideMenuController:(id)menuController {
     MFSideMenuOptions options = MFSideMenuOptionMenuButtonEnabled|MFSideMenuOptionBackButtonEnabled|MFSideMenuOptionShadowEnabled;
     
@@ -60,7 +60,7 @@
                                      options:options];
 }
 
-+ (MFSideMenu *) menuWithNavigationController:(UINavigationController *)controller
++ (MFSideMenu *) menuWithNavigationController:(MFSideMenuNavigationController *)controller
                         sideMenuController:(id)menuController
                                   location:(MFSideMenuLocation)side
                                    options:(MFSideMenuOptions)options {
@@ -73,7 +73,7 @@
                                      panMode:panMode];
 }
 
-+ (MFSideMenu *) menuWithNavigationController:(UINavigationController *)controller
++ (MFSideMenu *) menuWithNavigationController:(MFSideMenuNavigationController *)controller
                    sideMenuController:(id)menuController
                              location:(MFSideMenuLocation)side
                               options:(MFSideMenuOptions)options

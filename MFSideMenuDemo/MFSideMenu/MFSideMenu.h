@@ -4,7 +4,7 @@
 //  Created by Michael Frederick on 3/17/12.
 //
 
-#import "UINavigationController+MFSideMenu.h"
+#import "MFSideMenuNavigationController.h"
 
 static const CGFloat kMFSideMenuSidebarWidth = 270.0f;
 static const CGFloat kMFSideMenuShadowWidth = 10.0f;
@@ -51,15 +51,15 @@ typedef void (^MFSideMenuStateEventBlock)(MFSideMenuStateEvent);
 // this can be used to observe all MFSideMenuStateEvents
 @property (copy) MFSideMenuStateEventBlock menuStateEventBlock;
 
-+ (MFSideMenu *) menuWithNavigationController:(UINavigationController *)controller
++ (MFSideMenu *) menuWithNavigationController:(MFSideMenuNavigationController *)controller
                         sideMenuController:(id)menuController;
 
-+ (MFSideMenu *) menuWithNavigationController:(UINavigationController *)controller
++ (MFSideMenu *) menuWithNavigationController:(MFSideMenuNavigationController *)controller
                         sideMenuController:(id)menuController
                                   location:(MFSideMenuLocation)side
                                    options:(MFSideMenuOptions)options;
 
-+ (MFSideMenu *) menuWithNavigationController:(UINavigationController *)controller
++ (MFSideMenu *) menuWithNavigationController:(MFSideMenuNavigationController *)controller
                    sideMenuController:(id)menuController
                              location:(MFSideMenuLocation)side
                               options:(MFSideMenuOptions)options

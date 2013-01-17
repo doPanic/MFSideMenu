@@ -15,19 +15,21 @@
 @implementation DemoViewController
 
 - (void) dealloc {
-    self.navigationController.sideMenu.menuStateEventBlock = nil;
+    MFSideMenuNavigationController *navController = (MFSideMenuNavigationController *)self.navigationController;
+    navController.sideMenu.menuStateEventBlock = nil;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"Demo!";
     
+    MFSideMenuNavigationController *navController = (MFSideMenuNavigationController *)self.navigationController;
     // this isn't needed on the rootViewController of the navigation controller
-    [self.navigationController.sideMenu setupSideMenuBarButtonItem];
+    [navController.sideMenu setupSideMenuBarButtonItem];
     
     // if you want to listen for menu open/close events
     // this is useful, for example, if you want to change a UIBarButtonItem when the menu closes
-    self.navigationController.sideMenu.menuStateEventBlock = ^(MFSideMenuStateEvent event) {
+    navController.sideMenu.menuStateEventBlock = ^(MFSideMenuStateEvent event) {
         switch (event) {
             case MFSideMenuStateEventMenuWillOpen:
                 // the menu will open
