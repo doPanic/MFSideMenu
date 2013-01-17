@@ -52,6 +52,7 @@
 		2781288216370E2600BAFB60 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		278128891638543D00BAFB60 /* MFSideMenuNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MFSideMenuNavigationController.h; sourceTree = "<group>"; };
 		2781288A1638543D00BAFB60 /* MFSideMenuNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MFSideMenuNavigationController.m; sourceTree = "<group>"; };
+		99EFF6E016A82778007948F2 /* MFSideMenu.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MFSideMenu.podspec; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +73,7 @@
 		275F15781517E9B70052A240 = {
 			isa = PBXGroup;
 			children = (
+				99EFF6E016A82778007948F2 /* MFSideMenu.podspec */,
 				275F158D1517E9B80052A240 /* MFSideMenuDemo */,
 				275F15861517E9B80052A240 /* Frameworks */,
 				275F15841517E9B80052A240 /* Products */,
