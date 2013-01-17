@@ -24,19 +24,18 @@ static char menuKey;
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     [self.sideMenu performSelector:@selector(navigationControllerWillAppear)];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+    self.hadDidAppear = YES;
     [self.sideMenu performSelector:@selector(navigationControllerDidAppear)];
 }
 
 - (void) viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    
+    self.hadDidAppear = NO;
     [self.sideMenu performSelector:@selector(navigationControllerDidDisappear)];
 }
 

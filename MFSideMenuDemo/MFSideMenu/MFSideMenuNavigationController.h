@@ -13,5 +13,6 @@
 @interface MFSideMenuNavigationController : UINavigationController
 
 @property (nonatomic, strong) MFSideMenu *sideMenu;
+@property (nonatomic, assign) BOOL hadDidAppear;
 
 @end

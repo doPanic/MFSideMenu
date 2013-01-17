@@ -12,10 +12,11 @@
 
 @interface MFSideMenu() {
     CGPoint panGestureOrigin;
+    BOOL _shouldBeRemoved;
 }
 
-@property (nonatomic, assign, readwrite) UINavigationController *navigationController;
-@property (nonatomic, strong, readwrite) UITableViewController *sideMenuController;
+@property (nonatomic, assign, readwrite) MFSideMenuNavigationController *navigationController;
+@property (nonatomic, strong, readwrite) UIViewController<MFSideMenuDelegate>* sideMenuController;
 
 @property (nonatomic, assign) MFSideMenuLocation menuSide;
 @property (nonatomic, assign) MFSideMenuOptions options;
@@ -25,7 +26,6 @@
 @property (nonatomic, strong) NSLayoutConstraint *rightConstraint;
 @property (nonatomic, strong) NSLayoutConstraint *bottomConstraint;
 @property (nonatomic, strong) NSLayoutConstraint *leftConstraint;
-
 @property (nonatomic, assign) CGFloat panGestureVelocity;
 
 @end
@@ -33,82 +33,98 @@
 
 @implementation MFSideMenu
 
-@synthesize navigationController;
-@synthesize sideMenuController;
-@synthesize menuSide;
-@synthesize options;
-@synthesize panMode;
-@synthesize topConstraint;
-@synthesize rightConstraint;
-@synthesize bottomConstraint;
-@synthesize leftConstraint;
-@synthesize panGestureVelocity;
 @synthesize menuState = _menuState;
-@synthesize menuStateEventBlock;
 
 
 #pragma mark -
 #pragma mark - Menu Creation
 
-+ (MFSideMenu *) menuWithNavigationController:(MFSideMenuNavigationController *)controller
-                        sideMenuController:(id)menuController {
++ (MFSideMenu *) menuWithNavigationController:(MFSideMenuNavigationController *)navigationController
+                        sideMenuController:(UIViewController<MFSideMenuDelegate>*)menuController {
     MFSideMenuOptions options = MFSideMenuOptionMenuButtonEnabled|MFSideMenuOptionBackButtonEnabled|MFSideMenuOptionShadowEnabled;
     
-    return [MFSideMenu menuWithNavigationController:controller
+    return [MFSideMenu menuWithNavigationController:navigationController
                           sideMenuController:menuController
                                     location:MFSideMenuLocationLeft
                                      options:options];
 }
 
-+ (MFSideMenu *) menuWithNavigationController:(MFSideMenuNavigationController *)controller
-                        sideMenuController:(id)menuController
++ (MFSideMenu *) menuWithNavigationController:(MFSideMenuNavigationController *)navigationController
+                        sideMenuController:(UIViewController<MFSideMenuDelegate>*)menuController
                                   location:(MFSideMenuLocation)side
                                    options:(MFSideMenuOptions)options {
     MFSideMenuPanMode panMode = MFSideMenuPanModeNavigationBar|MFSideMenuPanModeNavigationController;
     
-    return [MFSideMenu menuWithNavigationController:controller
+    return [MFSideMenu menuWithNavigationController:navigationController
                           sideMenuController:menuController
                                     location:MFSideMenuLocationLeft
                                      options:options
                                      panMode:panMode];
 }
 
-+ (MFSideMenu *) menuWithNavigationController:(MFSideMenuNavigationController *)controller
-                   sideMenuController:(id)menuController
++ (MFSideMenu *) menuWithNavigationController:(MFSideMenuNavigationController *)navigationController
+                   sideMenuController:(UIViewController<MFSideMenuDelegate>*)menuController
                              location:(MFSideMenuLocation)side
                               options:(MFSideMenuOptions)options
                               panMode:(MFSideMenuPanMode)panMode {
     MFSideMenu *menu = [[MFSideMenu alloc] init];
-    menu.navigationController = controller;
+    menu.navigationController = navigationController;
     menu.sideMenuController = menuController;
     menu.menuSide = side;
     menu.options = options;
     menu.panMode = panMode;
-    controller.sideMenu = menu;
+    navigationController.sideMenu = menu;
+    menuController.sideMenu = menu;
     
     UIPanGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc]
                                           initWithTarget:menu action:@selector(navigationBarPanned:)];
 	[recognizer setMaximumNumberOfTouches:1];
     [recognizer setDelegate:menu];
-    [controller.navigationBar addGestureRecognizer:recognizer];
+    [navigationController.navigationBar addGestureRecognizer:recognizer];
+    menu.panGestureRecognizer = recognizer;
     
     recognizer = [[UIPanGestureRecognizer alloc]
                   initWithTarget:menu action:@selector(navigationControllerPanned:)];
 	[recognizer setMaximumNumberOfTouches:1];
     [recognizer setDelegate:menu];
-    [controller.view addGestureRecognizer:recognizer];
+    [navigationController.view addGestureRecognizer:recognizer];
+    menu.tapGestureRecognizer = recognizer;
     
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
                                              initWithTarget:menu action:@selector(navigationControllerTapped:)];
     [tapRecognizer setDelegate:menu];
-    [controller.view addGestureRecognizer:tapRecognizer];
+    [navigationController.view addGestureRecognizer:tapRecognizer];
     
     [[NSNotificationCenter defaultCenter] addObserver:menu
                                              selector:@selector(statusBarOrientationDidChange:)
                                                  name:UIApplicationDidChangeStatusBarOrientationNotification
                                                object:nil];
     
+    if (navigationController.hadDidAppear) {
+        [menu navigationControllerDidAppear];
+    }
+    
     return menu;
+}
+
+- (void)removeSideMenu {
+    [self setMenuState:MFSideMenuStateHidden];
+    _shouldBeRemoved = YES;
+}
+- (void)removeSideMenuOnceHidden {
+    DDLogVerbose(@"removeSideMenuOnceHidden");
+    [self.navigationController.navigationBar removeGestureRecognizer:self.panGestureRecognizer];
+    self.panGestureRecognizer = nil;
+    [self.navigationController.view removeGestureRecognizer:self.tapGestureRecognizer];
+    self.tapGestureRecognizer = nil;
+    
+    self.sideMenuController.sideMenu = nil;
+    self.sideMenuController = nil;
+    
+    self.navigationController = nil;
+    self.navigationController.sideMenu = nil;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark -
@@ -544,6 +560,11 @@
 - (void) sendMenuStateEventNotification:(MFSideMenuStateEvent)event {
     //[[NSNotificationCenter defaultCenter] postNotificationName:MFSideMenuStateEventDidOccurNotification
     //                                                    object:[NSNumber numberWithInt:event]];
+    
+    if (_shouldBeRemoved) {
+        [self removeSideMenuOnceHidden];
+        return;
+    }
     if(self.menuStateEventBlock) self.menuStateEventBlock(event);
 }
 

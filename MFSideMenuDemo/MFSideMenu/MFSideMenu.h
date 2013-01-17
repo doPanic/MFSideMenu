@@ -41,32 +41,42 @@ typedef enum {
 
 typedef void (^MFSideMenuStateEventBlock)(MFSideMenuStateEvent);
 
+@protocol MFSideMenuDelegate <NSObject>
+- (MFSideMenu *)sideMenu;
+- (void)setSideMenu:(MFSideMenu *)sideMenu;
+@end
+
 @interface MFSideMenu : NSObject<UIGestureRecognizerDelegate>
 
-@property (nonatomic, readonly) UINavigationController *navigationController;
-@property (nonatomic, strong, readonly) UITableViewController *sideMenuController;
+@property (nonatomic, readonly) MFSideMenuNavigationController *navigationController;
+@property (nonatomic, strong, readonly) UIViewController<MFSideMenuDelegate>* sideMenuController;
 @property (nonatomic, assign) MFSideMenuState menuState;
 @property (nonatomic, assign) MFSideMenuPanMode panMode;
+@property (nonatomic, strong) UIGestureRecognizer *panGestureRecognizer;
+@property (nonatomic, strong) UIGestureRecognizer *tapGestureRecognizer;
 
 // this can be used to observe all MFSideMenuStateEvents
 @property (copy) MFSideMenuStateEventBlock menuStateEventBlock;
 
-+ (MFSideMenu *) menuWithNavigationController:(MFSideMenuNavigationController *)controller
-                        sideMenuController:(id)menuController;
++ (MFSideMenu *) menuWithNavigationController:(MFSideMenuNavigationController *)navigationController
+                        sideMenuController:(UIViewController<MFSideMenuDelegate>*)menuController;
 
-+ (MFSideMenu *) menuWithNavigationController:(MFSideMenuNavigationController *)controller
-                        sideMenuController:(id)menuController
++ (MFSideMenu *) menuWithNavigationController:(MFSideMenuNavigationController *)navigationController
+                        sideMenuController:(UIViewController<MFSideMenuDelegate>*)menuController
                                   location:(MFSideMenuLocation)side
                                    options:(MFSideMenuOptions)options;
 
-+ (MFSideMenu *) menuWithNavigationController:(MFSideMenuNavigationController *)controller
-                   sideMenuController:(id)menuController
++ (MFSideMenu *) menuWithNavigationController:(MFSideMenuNavigationController *)navigationController
+                   sideMenuController:(UIViewController<MFSideMenuDelegate>*)menuController
                              location:(MFSideMenuLocation)side
                               options:(MFSideMenuOptions)options
                               panMode:(MFSideMenuPanMode)panMode;
 
+- (void) removeSideMenu;
+
 - (UIBarButtonItem *) menuBarButtonItem;
 - (UIBarButtonItem *) backBarButtonItem;
 - (void) setupSideMenuBarButtonItem;
+
 
 @end
