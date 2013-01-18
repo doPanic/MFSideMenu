@@ -10,6 +10,11 @@
 #import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>
 #import "DDLog.h"
+#if DEBUG
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+#else
+static const int ddLogLevel = LOG_LEVEL_WARN;
+#endif
 
 @interface MFSideMenu() {
     CGPoint panGestureOrigin;
