@@ -84,6 +84,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
     menu.menuSide = side;
     menu.options = options;
     menu.panMode = panMode;
+    menu.considerStatusBar = YES;
     navigationController.sideMenu = menu;
     menuController.sideMenu = menu;
     
