@@ -9,6 +9,7 @@
 #import "MFSideMenu.h"
 #import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>
+#import "DDLog.h"
 
 @interface MFSideMenu() {
     CGPoint panGestureOrigin;
@@ -67,6 +68,11 @@
                              location:(MFSideMenuLocation)side
                               options:(MFSideMenuOptions)options
                               panMode:(MFSideMenuPanMode)panMode {
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 6.0) {
+        return nil;
+    }
+    
+    
     MFSideMenu *menu = [[MFSideMenu alloc] init];
     menu.navigationController = navigationController;
     menu.sideMenuController = menuController;
@@ -426,7 +432,7 @@
 
 - (void) orientSideMenuFromStatusBar {
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+    CGSize statusBarSize = self.considerStatusBar ? [[UIApplication sharedApplication] statusBarFrame].size : CGSizeZero;
     CGSize windowSize = self.navigationController.view.window.bounds.size;
     CGFloat angle = 0.0;
     

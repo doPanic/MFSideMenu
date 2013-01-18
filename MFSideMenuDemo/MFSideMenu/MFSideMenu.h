@@ -54,6 +54,7 @@ typedef void (^MFSideMenuStateEventBlock)(MFSideMenuStateEvent);
 @property (nonatomic, assign) MFSideMenuPanMode panMode;
 @property (nonatomic, strong) UIGestureRecognizer *panGestureRecognizer;
 @property (nonatomic, strong) UIGestureRecognizer *tapGestureRecognizer;
+@property (nonatomic, assign) BOOL considerStatusBar;
 
 // this can be used to observe all MFSideMenuStateEvents
 @property (copy) MFSideMenuStateEventBlock menuStateEventBlock;
