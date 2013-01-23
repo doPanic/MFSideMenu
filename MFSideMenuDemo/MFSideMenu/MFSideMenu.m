@@ -99,6 +99,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
                                           initWithTarget:menu action:@selector(navigationBarPanned:)];
 	[recognizer setMaximumNumberOfTouches:1];
     [recognizer setDelegate:menu];
+    [recognizer setCancelsTouchesInView:NO];
     [navigationController.navigationBar addGestureRecognizer:recognizer];
     menu.panGestureRecognizer = recognizer;
     
@@ -106,6 +107,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
                   initWithTarget:menu action:@selector(navigationControllerPanned:)];
 	[recognizer setMaximumNumberOfTouches:1];
     [recognizer setDelegate:menu];
+    [recognizer setCancelsTouchesInView:NO];
     [navigationController.view addGestureRecognizer:recognizer];
     menu.tapGestureRecognizer = recognizer;
     
