@@ -101,7 +101,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
     [recognizer setDelegate:menu];
     [recognizer setCancelsTouchesInView:NO];
     [navigationController.navigationBar addGestureRecognizer:recognizer];
-    menu.panGestureRecognizer = recognizer;
+    menu.barGestureRecognizer = recognizer;
     
     recognizer = [[UIPanGestureRecognizer alloc]
                   initWithTarget:menu action:@selector(navigationControllerPanned:)];
@@ -109,12 +109,14 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
     [recognizer setDelegate:menu];
     [recognizer setCancelsTouchesInView:NO];
     [navigationController.view addGestureRecognizer:recognizer];
-    menu.tapGestureRecognizer = recognizer;
+    menu.panGestureRecognizer = recognizer;
     
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
                                              initWithTarget:menu action:@selector(navigationControllerTapped:)];
     [tapRecognizer setDelegate:menu];
+    [tapRecognizer setCancelsTouchesInView:NO];
     [navigationController.view addGestureRecognizer:tapRecognizer];
+    menu.tapGestureRecognizer = tapRecognizer;
     
     [[NSNotificationCenter defaultCenter] addObserver:menu
                                              selector:@selector(statusBarOrientationDidChange:)
@@ -134,7 +136,9 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
 }
 - (void)removeSideMenuOnceHidden {
     DDLogVerbose(@"removeSideMenuOnceHidden");
-    [self.navigationController.navigationBar removeGestureRecognizer:self.panGestureRecognizer];
+    [self.navigationController.navigationBar removeGestureRecognizer:self.barGestureRecognizer];
+    self.barGestureRecognizer = nil;
+    [self.navigationController.view removeGestureRecognizer:self.panGestureRecognizer];
     self.panGestureRecognizer = nil;
     [self.navigationController.view removeGestureRecognizer:self.tapGestureRecognizer];
     self.tapGestureRecognizer = nil;

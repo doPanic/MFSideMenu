@@ -52,6 +52,7 @@ typedef void (^MFSideMenuStateEventBlock)(MFSideMenuStateEvent);
 @property (nonatomic, strong, readonly) UIViewController<MFSideMenuDelegate>* sideMenuController;
 @property (nonatomic, assign) MFSideMenuState menuState;
 @property (nonatomic, assign) MFSideMenuPanMode panMode;
+@property (nonatomic, strong) UIGestureRecognizer *barGestureRecognizer;
 @property (nonatomic, strong) UIGestureRecognizer *panGestureRecognizer;
 @property (nonatomic, strong) UIGestureRecognizer *tapGestureRecognizer;
 @property (nonatomic, assign) BOOL considerStatusBar;
