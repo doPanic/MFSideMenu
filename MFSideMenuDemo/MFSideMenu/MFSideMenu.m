@@ -11,16 +11,7 @@
 #import <objc/runtime.h>
 
 #import "DDLog.h" // LUMBERJACK
-#ifndef DDLOG_HAS_LOG_LEVEL
-#if DEBUG
-static const int ddLogLevel = LOG_LEVEL_VERBOSE;
-#else
 static const int ddLogLevel = LOG_LEVEL_WARN;
-#endif
-#define DDLOG_HAS_LOG_LEVEL
-#endif // END OF LUMBERJACK
-
-
 
 
 @interface MFSideMenu() {
