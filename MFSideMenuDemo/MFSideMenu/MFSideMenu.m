@@ -13,6 +13,7 @@
 #import "DDLog.h" // LUMBERJACK
 static const int ddLogLevel = LOG_LEVEL_WARN;
 
+MFSideMenu *_activeSideMenu = nil;
 
 @interface MFSideMenu() {
     CGPoint panGestureOrigin;
@@ -118,6 +119,7 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
         [menu navigationControllerDidAppear];
     }
     
+    _activeSideMenu = menu;
     return menu;
 }
 
@@ -139,6 +141,10 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
     
     self.navigationController = nil;
     self.navigationController.sideMenu = nil;
+    
+    if ([_activeSideMenu isEqual:self]) {
+        _activeSideMenu = nil;
+    }
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -629,6 +635,10 @@ static const int ddLogLevel = LOG_LEVEL_WARN;
     pathRect.size.width = kMFSideMenuShadowWidth;
     
     self.rootViewController.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:pathRect].CGPath;
+}
+
++ (MFSideMenu *)activeSideMenu {
+    return _activeSideMenu;
 }
 
 @end

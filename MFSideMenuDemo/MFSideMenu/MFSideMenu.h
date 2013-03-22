@@ -22,10 +22,11 @@ typedef enum {
     MFSideMenuOptionShadowEnabled = 1 << 2, // enable the shadow between the navigation controller & side menu
 } MFSideMenuOptions;
 
-typedef enum {
+typedef NS_OPTIONS(NSUInteger, MFSideMenuPanMode) {
+    MFSideMenuPanModeNone = 0,
     MFSideMenuPanModeNavigationBar = 1 << 0, // enable panning on the navigation bar
     MFSideMenuPanModeNavigationController = 1 << 1 // enable panning on the body of the navigation controller
-} MFSideMenuPanMode;
+};
 
 typedef enum {
     MFSideMenuStateHidden, // the menu is hidden
@@ -45,6 +46,9 @@ typedef void (^MFSideMenuStateEventBlock)(MFSideMenuStateEvent);
 - (MFSideMenu *)sideMenu;
 - (void)setSideMenu:(MFSideMenu *)sideMenu;
 @end
+
+@class MFSideMenu;
+extern MFSideMenu *_activeSideMenu;
 
 @interface MFSideMenu : NSObject<UIGestureRecognizerDelegate>
 
@@ -80,5 +84,6 @@ typedef void (^MFSideMenuStateEventBlock)(MFSideMenuStateEvent);
 - (UIBarButtonItem *) backBarButtonItem;
 - (void) setupSideMenuBarButtonItem;
 
++ (MFSideMenu *)activeSideMenu;
 
 @end
