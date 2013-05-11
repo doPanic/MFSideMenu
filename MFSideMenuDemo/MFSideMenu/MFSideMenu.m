@@ -10,8 +10,10 @@
 #import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>
 
+#if __POD_CocoaLumberjack
 #import "DDLog.h" // LUMBERJACK
 static const int ddLogLevel = LOG_LEVEL_WARN;
+#endif 
 
 MFSideMenu *_activeSideMenu = nil;
 
@@ -128,7 +130,9 @@ MFSideMenu *_activeSideMenu = nil;
     _shouldBeRemoved = YES;
 }
 - (void)removeSideMenuOnceHidden {
+#if __POD_CocoaLumberjack
     DDLogVerbose(@"removeSideMenuOnceHidden");
+#endif
     [self.navigationController.navigationBar removeGestureRecognizer:self.barGestureRecognizer];
     self.barGestureRecognizer = nil;
     [self.navigationController.view removeGestureRecognizer:self.panGestureRecognizer];

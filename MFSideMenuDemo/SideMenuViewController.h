@@ -7,7 +7,7 @@
 #import <UIKit/UIKit.h>
 #import "MFSideMenu.h"
 
-@interface SideMenuViewController : UITableViewController<UISearchBarDelegate>
+@interface SideMenuViewController : UITableViewController<UISearchBarDelegate, MFSideMenuDelegate>
 
 @property (nonatomic, assign) MFSideMenu *sideMenu;
 
