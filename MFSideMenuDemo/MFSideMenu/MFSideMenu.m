@@ -253,10 +253,10 @@ MFSideMenu *_activeSideMenu = nil;
 #pragma mark - UIBarButtonItems & Callbacks
 
 - (UIBarButtonItem *)menuBarButtonItem {
-    return [[UIBarButtonItem alloc]
-            initWithImage:[UIImage imageNamed:@"menu-icon.png"] style:UIBarButtonItemStyleBordered
-            target:self
-            action:@selector(toggleSideMenuPressed:)];
+    return [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu-icon.png"]
+                                            style:UIBarButtonItemStyleBordered
+                                           target:self
+                                           action:@selector(toggleSideMenuPressed:)];
 }
 
 - (UIBarButtonItem *)backBarButtonItem {
@@ -266,7 +266,7 @@ MFSideMenu *_activeSideMenu = nil;
                                            action:@selector(backButtonPressed:)];
 }
 
-- (void) setupSideMenuBarButtonItem {
+- (void)setupSideMenuBarButtonItem {
     UINavigationItem *navigationItem = self.navigationController.topViewController.navigationItem;
     if([self menuButtonEnabled]) {
         if(self.menuSide == MFSideMenuLocationRight && !navigationItem.rightBarButtonItem) {
@@ -284,7 +284,7 @@ MFSideMenu *_activeSideMenu = nil;
     }
 }
 
-- (void) toggleSideMenuPressed:(id)sender {
+- (void)toggleSideMenuPressed:(id)sender {
     if(self.menuState == MFSideMenuStateVisible) {
         [self setMenuState:MFSideMenuStateHidden];
     } else {
@@ -292,7 +292,7 @@ MFSideMenu *_activeSideMenu = nil;
     }
 }
 
-- (void) backButtonPressed:(id)sender {
+- (void)backButtonPressed:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
