@@ -14,6 +14,10 @@
 #import "DDLog.h" // LUMBERJACK
 static const int ddLogLevel = LOG_LEVEL_WARN;
 #endif 
+#ifdef __POD_StaticLumberjack
+#import "DDLog.h" // LUMBERJACK
+static const int ddLogLevel = LOG_LEVEL_WARN;
+#endif 
 
 MFSideMenu *_activeSideMenu = nil;
 
@@ -131,6 +135,9 @@ MFSideMenu *_activeSideMenu = nil;
 }
 - (void)removeSideMenuOnceHidden {
 #ifdef __POD_CocoaLumberjack
+    DDLogVerbose(@"removeSideMenuOnceHidden");
+#endif
+#ifdef __POD_StaticLumberjack
     DDLogVerbose(@"removeSideMenuOnceHidden");
 #endif
     [self.navigationController.navigationBar removeGestureRecognizer:self.barGestureRecognizer];
