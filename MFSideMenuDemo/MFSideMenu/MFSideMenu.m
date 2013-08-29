@@ -10,11 +10,11 @@
 #import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>
 
-#ifdef __POD_CocoaLumberjack
+#ifdef COCOAPODS_POD_AVAILABLE__CocoaLumberjack
 #import "DDLog.h" // LUMBERJACK
 static const int ddLogLevel = LOG_LEVEL_WARN;
 #endif 
-#ifdef __POD_StaticLumberjack
+#ifdef COCOAPODS_POD_AVAILABLE__StaticLumberjack
 #import "DDLog.h" // LUMBERJACK
 static const int ddLogLevel = LOG_LEVEL_WARN;
 #endif 
@@ -134,10 +134,10 @@ MFSideMenu *_activeSideMenu = nil;
     _shouldBeRemoved = YES;
 }
 - (void)removeSideMenuOnceHidden {
-#ifdef __POD_CocoaLumberjack
+#ifdef COCOAPODS_POD_AVAILABLE__CocoaLumberjack
     DDLogVerbose(@"removeSideMenuOnceHidden");
 #endif
-#ifdef __POD_StaticLumberjack
+#ifdef COCOAPODS_POD_AVAILABLE__StaticLumberjack
     DDLogVerbose(@"removeSideMenuOnceHidden");
 #endif
     [self.navigationController.navigationBar removeGestureRecognizer:self.barGestureRecognizer];
