@@ -16,11 +16,11 @@ typedef enum {
     MFSideMenuLocationRight // show the menu on the right hand side
 } MFSideMenuLocation;
 
-typedef enum {
+typedef NS_OPTIONS(NSUInteger, MFSideMenuOptions) {
     MFSideMenuOptionMenuButtonEnabled = 1 << 0, // enable the 'menu' UIBarButtonItem
     MFSideMenuOptionBackButtonEnabled = 1 << 1, // enable the 'back' UIBarButtonItem
     MFSideMenuOptionShadowEnabled = 1 << 2, // enable the shadow between the navigation controller & side menu
-} MFSideMenuOptions;
+};
 
 typedef NS_OPTIONS(NSUInteger, MFSideMenuPanMode) {
     MFSideMenuPanModeNone = 0,
