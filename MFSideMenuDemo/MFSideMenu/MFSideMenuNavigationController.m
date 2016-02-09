@@ -22,6 +22,10 @@ static char menuKey;
     return (MFSideMenu *)objc_getAssociatedObject(self, &menuKey);
 }
 
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.sideMenu performSelector:@selector(navigationControllerWillAppear)];

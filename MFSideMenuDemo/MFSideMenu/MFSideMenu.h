@@ -78,11 +78,16 @@ extern MFSideMenu *_activeSideMenu;
                               options:(MFSideMenuOptions)options
                               panMode:(MFSideMenuPanMode)panMode;
 
+/*! remove side menu from current view hierarchy */
 - (void) removeSideMenu;
 
 - (UIBarButtonItem *) menuBarButtonItem;
+
 - (UIBarButtonItem *) backBarButtonItem;
+
 - (void) setupSideMenuBarButtonItem;
+
+- (void)toggleSideMenuPressed:(id)sender;
 
 + (MFSideMenu *)activeSideMenu;
 

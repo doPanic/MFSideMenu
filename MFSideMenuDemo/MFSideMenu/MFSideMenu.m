@@ -93,6 +93,8 @@ MFSideMenu *_activeSideMenu = nil;
     navigationController.sideMenu = menu;
     menuController.sideMenu = menu;
     
+    
+    
     UIPanGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc]
                                           initWithTarget:menu action:@selector(navigationBarPanned:)];
 	[recognizer setMaximumNumberOfTouches:1];
@@ -101,9 +103,10 @@ MFSideMenu *_activeSideMenu = nil;
     [navigationController.navigationBar addGestureRecognizer:recognizer];
     menu.barGestureRecognizer = recognizer;
     
-    recognizer = [[UIPanGestureRecognizer alloc]
+    recognizer = [[UIScreenEdgePanGestureRecognizer alloc]
                   initWithTarget:menu action:@selector(navigationControllerPanned:)];
-	[recognizer setMaximumNumberOfTouches:1];
+    UIScreenEdgePanGestureRecognizer * edgeRecognizer = (UIScreenEdgePanGestureRecognizer *)recognizer;
+    edgeRecognizer.edges = UIRectEdgeLeft;
     [recognizer setDelegate:menu];
     [recognizer setCancelsTouchesInView:NO];
     [navigationController.view addGestureRecognizer:recognizer];
@@ -122,6 +125,7 @@ MFSideMenu *_activeSideMenu = nil;
                                                object:nil];
     
     if (navigationController.hadDidAppear) {
+        [menu navigationControllerWillAppear];
         [menu navigationControllerDidAppear];
     }
     
@@ -314,6 +318,8 @@ MFSideMenu *_activeSideMenu = nil;
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     if ([touch.view isKindOfClass:[UIControl class]]) return NO;
     
+    if([gestureRecognizer isKindOfClass:[UIScreenEdgePanGestureRecognizer class]]) return YES;
+    
     if([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] &&
        self.menuState != MFSideMenuStateHidden) return YES;
     
@@ -323,7 +329,7 @@ MFSideMenu *_activeSideMenu = nil;
             [touch.view.superview isKindOfClass:[UITableViewCell class]]) return NO;
         
         if([gestureRecognizer.view isEqual:self.navigationController.view] &&
-           [self navigationControllerPanEnabled]) return YES;
+           ([self navigationControllerPanEnabled] || self.menuState == MFSideMenuStateVisible)) return YES;
         
         if([gestureRecognizer.view isEqual:self.navigationController.navigationBar] &&
            self.menuState == MFSideMenuStateHidden &&
@@ -377,7 +383,7 @@ MFSideMenu *_activeSideMenu = nil;
         CGFloat viewWidth = [self widthAdjustedForInterfaceOrientation:view];
         
         if(self.menuState == MFSideMenuStateHidden) {
-            BOOL showMenu = (self.menuSide == MFSideMenuLocationLeft) ? (finalX > viewWidth/2) : (finalX < -1*viewWidth/2);
+            BOOL showMenu = (self.menuSide == MFSideMenuLocationLeft) ? (finalX > kMFSideMenuSidebarWidth) : (finalX < -1*kMFSideMenuSidebarWidth);
             if(showMenu) {
                 self.panGestureVelocity = velocity.x;
                 [self setMenuState:MFSideMenuStateVisible];
@@ -425,7 +431,8 @@ MFSideMenu *_activeSideMenu = nil;
 #pragma mark - UIGestureRecognizer Helpers
 
 - (CGPoint) pointAdjustedForInterfaceOrientation:(CGPoint)point {
-    switch (self.rootViewController.interfaceOrientation)
+    //switch (self.rootViewController.interfaceOrientation)
+    switch (UIInterfaceOrientationPortrait)
     {
         case UIInterfaceOrientationPortrait:
             return CGPointMake(point.x, point.y);
@@ -446,7 +453,8 @@ MFSideMenu *_activeSideMenu = nil;
 }
 
 - (CGFloat) widthAdjustedForInterfaceOrientation:(UIView *)view {
-    if(UIInterfaceOrientationIsPortrait(self.rootViewController.interfaceOrientation)) {
+    //if(UIInterfaceOrientationIsPortrait(self.rootViewController.interfaceOrientation)) {
+    if(UIInterfaceOrientationIsPortrait(UIInterfaceOrientationPortrait)) {
         return view.frame.size.width;
     } else {
         return view.frame.size.height;
@@ -458,7 +466,7 @@ MFSideMenu *_activeSideMenu = nil;
 #pragma mark - Menu Rotation
 
 - (void) orientSideMenuFromStatusBar {
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    UIInterfaceOrientation orientation = UIInterfaceOrientationPortrait;//self.rootViewController.interfaceOrientation;//[[UIApplication sharedApplication] statusBarOrientation];
     CGSize statusBarSize = self.considerStatusBar ? [[UIApplication sharedApplication] statusBarFrame].size : CGSizeZero;
     CGSize windowSize = self.navigationController.view.window.bounds.size;
     CGFloat angle = 0.0;
@@ -553,6 +561,13 @@ MFSideMenu *_activeSideMenu = nil;
     }
 }
 
+- (void)setOptions:(MFSideMenuOptions)options {
+    _options = options;
+    if ([self menuButtonEnabled]) {
+        [self setupSideMenuBarButtonItem];
+    }
+}
+
 // menu open/close animation
 - (void) toggleSideMenuHidden:(BOOL)hidden {
     // notify that the menu state event is starting
@@ -614,7 +629,8 @@ MFSideMenu *_activeSideMenu = nil;
     frame.origin = CGPointZero;
     
     // need to account for the controller's transform
-    switch (rootController.interfaceOrientation)
+    //switch (rootController.interfaceOrientation)
+    switch (UIInterfaceOrientationPortrait)
     {
         case UIInterfaceOrientationPortrait:
             frame.origin.x = xOffset;
