@@ -9,6 +9,7 @@
 #import "MFSideMenuNavigationController.h"
 #import "MFSideMenu.h"
 #import <objc/runtime.h>
+#import "UIViewController+PAKOrientation.h"
 
 @implementation MFSideMenuNavigationController
 
@@ -20,10 +21,6 @@ static char menuKey;
 
 - (MFSideMenu *)sideMenu {
     return (MFSideMenu *)objc_getAssociatedObject(self, &menuKey);
-}
-
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
 - (void) viewWillAppear:(BOOL)animated {

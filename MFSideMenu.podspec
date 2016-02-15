@@ -12,4 +12,5 @@ Pod::Spec.new do |s|
     sp.resources = 'MFSideMenuDemo/MFSideMenu/*.png'
   end
   s.frameworks   = 'QuartzCore'
+  s.dependency 'PanicAppKit'
 end
