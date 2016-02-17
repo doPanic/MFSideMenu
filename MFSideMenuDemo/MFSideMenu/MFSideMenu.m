@@ -285,11 +285,28 @@ MFSideMenu *_activeSideMenu = nil;
     UINavigationItem *navigationItem = self.navigationController.topViewController.navigationItem;
     if([self menuButtonEnabled]) {
         if(self.menuSide == MFSideMenuLocationRight && !navigationItem.rightBarButtonItem) {
-            navigationItem.rightBarButtonItem = [self menuBarButtonItem];
-        } else if(self.menuSide == MFSideMenuLocationLeft &&
+            UIBarButtonItem *rightButton = navigationItem.rightBarButtonItem;
+            NSArray *barButtonItems;
+            if (rightButton != nil) {
+                barButtonItems = @[ [self menuBarButtonItem], rightButton ];
+            }
+            else {
+                barButtonItems = @[ [self menuBarButtonItem] ];
+            }
+            navigationItem.rightBarButtonItems = barButtonItems;
+        }
+        else if(self.menuSide == MFSideMenuLocationLeft &&
                   (self.menuState == MFSideMenuStateVisible || self.navigationController.viewControllers.count == 1)) {
             // show the menu button on the root view controller or if the menu is open
-            navigationItem.leftBarButtonItem = [self menuBarButtonItem];
+            UIBarButtonItem *leftButton = navigationItem.leftBarButtonItem;
+            NSArray *barButtonItems;
+            if (leftButton != nil) {
+                barButtonItems = @[ [self menuBarButtonItem], leftButton ];
+            }
+            else {
+                barButtonItems = @[ [self menuBarButtonItem] ];
+            }
+            navigationItem.leftBarButtonItems = barButtonItems;
         }
     }
     
