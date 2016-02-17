@@ -267,45 +267,54 @@ MFSideMenu *_activeSideMenu = nil;
 #pragma mark -
 #pragma mark - UIBarButtonItems & Callbacks
 
+UIBarButtonItem *_menuBarButtonItem = nil;
+UIBarButtonItem *_backBarButtonItem = nil;
+
 - (UIBarButtonItem *)menuBarButtonItem {
-    return [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu-icon.png"]
+    if (!_menuBarButtonItem) {
+        _menuBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu-icon.png"]
                                             style:UIBarButtonItemStyleBordered
                                            target:self
                                            action:@selector(toggleSideMenuPressed:)];
+    }
+    return _menuBarButtonItem;
 }
 
 - (UIBarButtonItem *)backBarButtonItem {
-    return [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow"]
+    if (!_backBarButtonItem) {
+        _backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow"]
                                             style:UIBarButtonItemStyleBordered
                                            target:self
                                            action:@selector(backButtonPressed:)];
+    }
+    return _backBarButtonItem;
+}
+
+NSArray *GetBarButtonItems(NSArray *barButtonItems, UIBarButtonItem *menuButton) {
+    if (barButtonItems.count < 1) {
+        barButtonItems = @[ menuButton ];
+    }
+    else {
+        if (![barButtonItems containsObject:menuButton]) {
+            NSMutableArray *newBarButtonItems = [NSMutableArray arrayWithArray:barButtonItems];
+            [newBarButtonItems insertObject:menuButton atIndex:0];
+            barButtonItems = [NSArray arrayWithArray:newBarButtonItems];
+        }
+    }
+    return barButtonItems;
 }
 
 - (void)setupSideMenuBarButtonItem {
     UINavigationItem *navigationItem = self.navigationController.topViewController.navigationItem;
     if([self menuButtonEnabled]) {
         if(self.menuSide == MFSideMenuLocationRight && !navigationItem.rightBarButtonItem) {
-            UIBarButtonItem *rightButton = navigationItem.rightBarButtonItem;
-            NSArray *barButtonItems;
-            if (rightButton != nil) {
-                barButtonItems = @[ [self menuBarButtonItem], rightButton ];
-            }
-            else {
-                barButtonItems = @[ [self menuBarButtonItem] ];
-            }
+            NSArray *barButtonItems = GetBarButtonItems(navigationItem.rightBarButtonItems, [self menuBarButtonItem]);
             navigationItem.rightBarButtonItems = barButtonItems;
         }
         else if(self.menuSide == MFSideMenuLocationLeft &&
                   (self.menuState == MFSideMenuStateVisible || self.navigationController.viewControllers.count == 1)) {
             // show the menu button on the root view controller or if the menu is open
-            UIBarButtonItem *leftButton = navigationItem.leftBarButtonItem;
-            NSArray *barButtonItems;
-            if (leftButton != nil) {
-                barButtonItems = @[ [self menuBarButtonItem], leftButton ];
-            }
-            else {
-                barButtonItems = @[ [self menuBarButtonItem] ];
-            }
+            NSArray *barButtonItems = GetBarButtonItems(navigationItem.leftBarButtonItems, [self menuBarButtonItem]);
             navigationItem.leftBarButtonItems = barButtonItems;
         }
     }
